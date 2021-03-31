@@ -22,9 +22,12 @@ class HAPI(API):
         data = self.rtif.receive()
         tar_rad = np.asarray(data['Target Joint Positions'], dtype=np.float32)
         cur_rad = np.asarray(data['Actual Joint Positions'], dtype=np.float32)
+        # print('tar:', tar_rad)
+        # print('cur:', cur_rad)
         speed = np.asarray(data['Actual Joint Velocities'])
+        # print('speed:', speed)
         return np.max(np.abs((tar_rad - cur_rad) * select)) < 1e-4 and np.max(
-            np.abs(speed * select)) < 1e-1
+            np.abs(speed * select)) < 1e-2
 
     def RecordingActions(self):
         """

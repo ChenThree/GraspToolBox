@@ -7,6 +7,10 @@ ROBOT_START_ROTATION = [0.11968014, 0.9905304, 0.06719151, 0.00340645]
 # camera front
 # ROBOT_START_ROTATION = [0.01489975, -0.01462269, 0.9920806, -0.12385556]
 
+# robot grasp status
+ROBOT_GRASP_POINT = [0.4, 0, 0.2]
+ROBOT_GRASP_ROTATION = [0, -7.07106781e-01, -7.07106781e-01, 0]
+
 # gripper port
 GRIPPER_PORT = '/dev/ttyUSB0'
 
@@ -36,5 +40,5 @@ resolution_x = 1280
 resolution_y = 720
 
 # grasp mask
-KINECT_MASK_IAMGE_PATH = './GraspNetToolBox/utils/kinect_mask.png'
-REALSENSE_MASK_IAMGE_PATH = './GraspNetToolBox/utils/realsense_mask.png'
+KINECT_MASK_IAMGE_PATH = './utils/kinect_mask.png'
+REALSENSE_MASK_IAMGE_PATH = './utils/realsense_mask.png'

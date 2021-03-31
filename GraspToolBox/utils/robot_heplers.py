@@ -1,6 +1,6 @@
 import time
 # get robot ip address
-from GraspToolBox.config import IP_ADDRESS, ROBOT_START_POINT, ROBOT_START_ROTATION
+from GraspToolBox.config import IP_ADDRESS, ROBOT_START_POINT, ROBOT_START_ROTATION, ROBOT_GRASP_POINT, ROBOT_GRASP_ROTATION
 # lower api
 from GraspToolBox.RTIF.HAPI import HAPI
 
@@ -34,6 +34,18 @@ class RobotController():
         self.wait_for_movement()
         print('move to start point completed')
 
+    def move_grasp_position(self, a=1.2, v=0.05, t=None):
+        # move robot
+        print('move to grasp point')
+        self.controller.MoveEndPointToPosition(
+            pos=ROBOT_GRASP_POINT,
+            rotation=ROBOT_GRASP_ROTATION,
+            a=a,
+            v=v,
+            t=t)
+        self.wait_for_movement()
+        print('move to grasp point completed')
+
     def move_robot(self, pos=None, rotation=None, a=1.2, v=0.05, t=None):
         print('move to given point')
         self.wait_for_movement()
@@ -56,17 +68,8 @@ if __name__ == '__main__':
     print('now_rot ==', q)
     euler = q_to_euler(q)
     print(euler)
-    euler = np.array([-179.93519185, -4.53879681, -2.04890715])
+    euler = np.array([-180, 0, 90])
     q = euler_to_q(euler)
     print(q)
-    # controller.reset_robot()
-    # base
-    # controller.move_robot(rotation=q)
-    # ori = [[0.701479089333879, -0.49627869568818056, 0.5928481716284633],
-    #        [
-    #            0.2830117195130695, -0.6518756969714905, -0.6526927081309741,
-    #            0.2625922144101839
-    #        ]]
-    # controller.set_coordinate_origin(ori=ori)
-    # controller.move_robot(
-    #     rotation=[0.28687698, 0.63541435, 0.31023961, 0.64629837])
+    controller.move_grasp_position()
+    controller.reset_robot()
