@@ -1,7 +1,7 @@
-import GraspNetToolBox.RTIF.LowLevel.quaternion as quat
+import GraspToolBox.RTIF.LowLevel.quaternion as quat
 import numpy as np
 import time
-from GraspNetToolBox.RTIF.API import API
+from GraspToolBox.RTIF.API import API
 
 
 class HAPI(API):

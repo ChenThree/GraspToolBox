@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from GraspNetToolBox.config import (ROBOT_START_POINT, ROBOT_START_ROTATION,
+from GraspToolBox.config import (ROBOT_START_POINT, ROBOT_START_ROTATION,
                                     pos_kinect, pos_realsense, q_kinect,
                                     q_realsense)
 # get q and x,y,z from config

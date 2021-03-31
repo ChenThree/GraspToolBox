@@ -1,8 +1,8 @@
 import time
 # get robot ip address
-from GraspNetToolBox.config import IP_ADDRESS, ROBOT_START_POINT, ROBOT_START_ROTATION
+from GraspToolBox.config import IP_ADDRESS, ROBOT_START_POINT, ROBOT_START_ROTATION
 # lower api
-from GraspNetToolBox.RTIF.HAPI import HAPI
+from GraspToolBox.RTIF.HAPI import HAPI
 
 
 class RobotController():
@@ -48,7 +48,7 @@ class RobotController():
 
 if __name__ == '__main__':
     import numpy as np
-    from GraspNetToolBox.utils.ord_helpers import euler_to_q, q_to_euler
+    from GraspToolBox.utils.ord_helpers import euler_to_q, q_to_euler
     controller = RobotController()
     pos = controller.get_pos()
     q = controller.get_rot()
@@ -61,7 +61,7 @@ if __name__ == '__main__':
     print(q)
     # controller.reset_robot()
     # base
-    controller.move_robot(rotation=q)
+    # controller.move_robot(rotation=q)
     # ori = [[0.701479089333879, -0.49627869568818056, 0.5928481716284633],
     #        [
     #            0.2830117195130695, -0.6518756969714905, -0.6526927081309741,

@@ -1,7 +1,7 @@
 import math
 import numpy as np
 import os.path
-from GraspNetToolBox.RTIF.LowLevel import rtif
+from GraspToolBox.RTIF.LowLevel import rtif
 
 
 class API(object):
