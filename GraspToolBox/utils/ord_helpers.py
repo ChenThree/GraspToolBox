@@ -57,6 +57,8 @@ trans_offset_realsense += np.array([0, 0, 0])
 
 
 def q_to_euler(q):
+    if len(q) != 4:
+        raise ValueError('Input should be a np.array with len == 4')
     # rpy
     sinr = 2.0 * (q[0] * q[1] + q[2] * q[3])
     cosr = 1.0 - 2.0 * (q[1] * q[1] + q[2] * q[2])
@@ -81,6 +83,8 @@ def normalize(q):
 
 
 def euler_to_q(rpy, order='321'):
+    if len(rpy) != 3:
+        raise ValueError('Input should be a np.array with len == 3')
     rpy = rpy / 180 * np.pi
     qx = (math.cos(rpy[0] / 2.), math.sin(rpy[0] / 2.), 0., 0.)
     qy = (math.cos(rpy[1] / 2.), 0., math.sin(rpy[1] / 2.), 0.)
@@ -112,7 +116,7 @@ def rot_camera_to_q_base(source, rot_in_camera):
     Returns:
         q_in_base (np.array): quat
     """
-    if np.shape(rot_in_camera) != (3.3):
+    if np.shape(rot_in_camera) != (3, 3):
         raise ValueError('Input should be a np.array with shape (3, 3)')
     # origin gripper along x axis
     euler_origin = np.array([-90, 0, -90])
