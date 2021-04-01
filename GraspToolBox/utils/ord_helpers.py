@@ -1,8 +1,8 @@
 import math
 import numpy as np
 from GraspToolBox.config import (ROBOT_START_POINT, ROBOT_START_ROTATION,
-                                    pos_kinect, pos_realsense, q_kinect,
-                                    q_realsense)
+                                 pos_kinect, pos_realsense, q_kinect,
+                                 q_realsense)
 # get q and x,y,z from config
 from scipy.spatial.transform import Rotation as R
 
@@ -52,7 +52,7 @@ trans_matrix_realsense, inv_matrix_realsense, trans_offset_realsense = get_trans
 trans_matrix_hand, inv_matrix_hand, trans_offset_hand = get_trans_matrix(
     ROBOT_START_POINT, ROBOT_START_ROTATION)
 # gripper center offset for realsense
-trans_offset_realsense += np.array([0, 0, 0.19])
+trans_offset_realsense += np.array([0, 0, 0])
 
 
 def q_to_euler(q):
@@ -118,10 +118,20 @@ def rot_camera_to_q_base(source, rot_in_camera):
     q_in_camera = matrix_to_q(rot_in_camera)
     # rotate to q_in_base
     if source == 'kinect':
+        # one steps for kinect
         q_in_base = qmul(matrix_to_q(inv_matrix_kinect), q_in_camera)
     else:
-        q_in_base = qmul(matrix_to_q(inv_matrix_realsense), q_in_camera)
+        # two steps for realsense
+        q_in_hand = qmul(matrix_to_q(inv_matrix_realsense), q_in_camera)
+        q_in_base = qmul(matrix_to_q(inv_matrix_hand), q_in_hand)
     q_in_base = qmul(q_in_base, q_origin)
+    # not rotate gripper too much
+    euler_in_base = q_to_euler(q_in_base)
+    if euler_in_base[2] > 90:
+        euler_in_base[2] -= 180
+    elif euler_in_base[2] < -90:
+        euler_in_base[2] += 180
+    q_in_base = euler_to_q(euler_in_base)
     return q_in_base
 
 

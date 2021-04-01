@@ -16,6 +16,9 @@ class RobotController():
     def get_rot(self):
         return self.controller.GetCurrentEndPos()[1]
 
+    def get_joint_rad(self):
+        return self.controller.GetCurrentJointRad()
+
     def wait_for_movement(self):
         # wait for movement to complete
         while not self.controller.isLastMovementEnd():
@@ -64,12 +67,14 @@ if __name__ == '__main__':
     controller = RobotController()
     pos = controller.get_pos()
     q = controller.get_rot()
+    rad = controller.get_joint_rad()
     print('now_pos ==', pos)
     print('now_rot ==', q)
+    print('now_rad ==', rad)
     euler = q_to_euler(q)
     print(euler)
     euler = np.array([-180, 0, 90])
     q = euler_to_q(euler)
     print(q)
-    controller.move_grasp_position()
+    # controller.move_grasp_position()
     controller.reset_robot()

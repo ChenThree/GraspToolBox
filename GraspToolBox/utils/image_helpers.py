@@ -112,5 +112,5 @@ if __name__ == '__main__':
         print(np.shape(image_rgb))
         print(np.shape(image_depth))
     # print(camera.get_intrinsics_matrix())
-    print(np.shape(camera.get_pointcloud()))
-    print(camera.get_pointcloud())
+    # print(np.shape(camera.get_pointcloud()))
+    # print(camera.get_pointcloud())
