@@ -1,6 +1,9 @@
 import time
+
 # get robot ip address
-from GraspToolBox.config import IP_ADDRESS, ROBOT_START_POINT, ROBOT_START_ROTATION, ROBOT_GRASP_POINT, ROBOT_GRASP_ROTATION
+from GraspToolBox.config import (IP_ADDRESS, ROBOT_GRASP_POINT,
+                                 ROBOT_GRASP_ROTATION, ROBOT_START_POINT,
+                                 ROBOT_START_ROTATION)
 # lower api
 from GraspToolBox.RTIF.HAPI import HAPI
 
@@ -63,6 +66,7 @@ class RobotController():
 
 if __name__ == '__main__':
     import numpy as np
+
     from GraspToolBox.utils.ord_helpers import euler_to_q, q_to_euler
     controller = RobotController()
     pos = controller.get_pos()

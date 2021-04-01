@@ -2,7 +2,6 @@ import cv2 as cv
 import numpy as np
 import pyrealsense2 as realsense
 from matplotlib import pyplot as plt
-from PIL import Image
 from pyk4a import PyK4A
 
 

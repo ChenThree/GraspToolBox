@@ -67,7 +67,7 @@ class StateMessageReceiver(object):
                     *struct.unpack_from('!6d', byte_stream, bias + 7 * 48))
                 message['Joint Control Currents'] = joint_data(
                     *struct.unpack_from('!6d', byte_stream,
-                                        bias + 8 * 48))  #7->8
+                                        bias + 8 * 48))  # 7->8
                 bias += 9 * 48
             elif bias == 444:
                 message['Actual Tool Coordinates'] = coordinate_data(

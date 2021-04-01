@@ -1,6 +1,7 @@
 import binascii
 import serial
 import time
+
 # get gripper port
 from GraspToolBox.config import GRIPPER_PORT
 

@@ -1,6 +1,7 @@
-import GraspToolBox.RTIF.LowLevel.quaternion as quat
 import numpy as np
 import time
+
+import GraspToolBox.RTIF.LowLevel.quaternion as quat
 from GraspToolBox.RTIF.API import API
 
 
@@ -73,8 +74,8 @@ class HAPI(API):
                         "Edit mode: 'e+Enter' to exit, 'u+Enter' to move cursor up, 'd+Enter' down,"
                     )
                     print(
-                        " 'm+Enter' to modify current, 't+Enter to delete, 'i' to insert before current, 'r+Enter to replay current'"
-                    )
+                        " 'm+Enter' to modify current, 't+Enter to delete, 'i' to insert before current, "
+                        + "'r+Enter to replay current'")
                     j = input()
                     if j == 'e':
                         break
@@ -154,7 +155,8 @@ class HAPI(API):
                            factor=10.0):
         """
         :param interactive: if True, call curses to capture keyboard input, else add add_value to current position
-        :param add_value: step size, for interactive mode, (dx, dy, dz, drx, dry, drz), else ((dx, dy, dz), (qw, qi, qj, qk)
+        :param add_value: step size, for interactive mode, (dx, dy, dz, drx, dry, drz),
+                          else ((dx, dy, dz), (qw, qi, qj, qk)
         :param factor: if in interactive mode, means key_hold boosting factor, the max speed will achieve after holding
                         a key for some time
         :return: current position after fine tuning in format (x,y,z),(w,i,j,k)
@@ -288,7 +290,7 @@ class HAPI(API):
                 'Notice: the external sensor connector points to +X, and tool towards -Z'
             )
             print('And press Enter key >>>')
-            if raw_input() == '':
+            if input() == '':
                 ori = self.GetCurrentEndPos()
                 print('New origin point is (%f, %f, %f)' % ori)
             else:

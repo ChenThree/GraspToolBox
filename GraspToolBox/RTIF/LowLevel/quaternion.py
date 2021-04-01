@@ -64,10 +64,10 @@ def from_euler(rpy, order='321'):
     qx = (math.cos(rpy[0] / 2.), math.sin(rpy[0] / 2.), 0., 0.)
     qy = (math.cos(rpy[1] / 2.), 0., math.sin(rpy[1] / 2.), 0.)
     qz = (math.cos(rpy[2] / 2.), 0., 0., math.sin(rpy[2] / 2.))
-    l = (qx, qy, qz)
+    q = (qx, qy, qz)
     order = (ord(order[0]) - ord('1'), ord(order[1]) - ord('1'),
              ord(order[2]) - ord('1'))
-    return normalize(qmul(qmul(l[order[0]], l[order[1]]), l[order[2]]))
+    return normalize(qmul(qmul(q[order[0]], q[order[1]]), q[order[2]]))
 
 
 def to_euler(q):

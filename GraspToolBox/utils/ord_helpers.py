@@ -1,10 +1,11 @@
 import math
 import numpy as np
+# get q and x,y,z from config
+from scipy.spatial.transform import Rotation as R
+
 from GraspToolBox.config import (ROBOT_START_POINT, ROBOT_START_ROTATION,
                                  pos_kinect, pos_realsense, q_kinect,
                                  q_realsense)
-# get q and x,y,z from config
-from scipy.spatial.transform import Rotation as R
 
 
 def q_to_matrix(rot):
@@ -84,10 +85,10 @@ def euler_to_q(rpy, order='321'):
     qx = (math.cos(rpy[0] / 2.), math.sin(rpy[0] / 2.), 0., 0.)
     qy = (math.cos(rpy[1] / 2.), 0., math.sin(rpy[1] / 2.), 0.)
     qz = (math.cos(rpy[2] / 2.), 0., 0., math.sin(rpy[2] / 2.))
-    l = (qx, qy, qz)
+    q = (qx, qy, qz)
     order = (ord(order[0]) - ord('1'), ord(order[1]) - ord('1'),
              ord(order[2]) - ord('1'))
-    return normalize(qmul(qmul(l[order[0]], l[order[1]]), l[order[2]]))
+    return normalize(qmul(qmul(q[order[0]], q[order[1]]), q[order[2]]))
 
 
 def qmul(q0, q1):
@@ -111,6 +112,8 @@ def rot_camera_to_q_base(source, rot_in_camera):
     Returns:
         q_in_base (np.array): quat
     """
+    if np.shape(rot_in_camera) != (3.3):
+        raise ValueError('Input should be a np.array with shape (3, 3)')
     # origin gripper along x axis
     euler_origin = np.array([-90, 0, -90])
     q_origin = euler_to_q(euler_origin)

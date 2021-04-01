@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import os.path
+
 from GraspToolBox.RTIF.LowLevel import rtif
 
 

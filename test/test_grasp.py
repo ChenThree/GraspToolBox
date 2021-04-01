@@ -1,6 +1,6 @@
 import numpy as np
 import open3d as o3d
-from graspnetAPI import Grasp, GraspGroup
+from graspnetAPI import Grasp
 
 # transform grasp
 g = Grasp()  # simple Grasp

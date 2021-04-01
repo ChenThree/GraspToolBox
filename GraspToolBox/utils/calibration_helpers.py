@@ -1,4 +1,5 @@
 import numpy as np
+
 from GraspToolBox.config import cx, cy, fx, fy, resolution_x, resolution_y
 
 # inv normalize
