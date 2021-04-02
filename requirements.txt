@@ -1,5 +1,9 @@
-numpy
 open3d
-Pillow
+numpy
 scipy
-tqdm
+Pillow
+serial
+opencv-python
+matplotlib
+pyk4a
+pyrealsense2
