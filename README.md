@@ -1,15 +1,18 @@
 # GraspToolBox
 
-GraspToolBox for VCLab of Electronic Engineering, Tsinghua University
-Experiment environment: UR5e Robot + Rototiq 2f 85 Gripper + Ubuntu18.04 with ROS-melodic
+GraspToolBox for VCLab of Electronic Engineering, Tsinghua University.  
+Experiment environment: UR5e Robot + Rototiq 2f 85 Gripper + Ubuntu18.04 with ROS-melodic.  
 
 ## Code Structure
 
-GraspToolBox
-    - RTIF : lower robot controller written by other research group, will be rewritten and deprecated soon
-    - utils : several helpers
-        - calibration_heplers : for getting camera intrinsics matrix, will be upgraded soon
-        - gripper_helpers : Rototiq 2f 85 Gripper serial controller, force controller will be added soon
+### GraspToolBox
+### RTIF :   
+    lower robot controller written by other research group, will be rewritten and deprecated soon  
+#### - utils :   
+    several helpers  
+#### - calibration_heplers :   
+    for getting camera intrinsics matrix, will be upgraded soon  
+    - gripper_helpers : Rototiq 2f 85 Gripper serial controller, force controller will be added soon
         - image_controllers : easily getting rgb and depth picture or pointcloud from Kinect camera or realsense camera
         - ord_helpers : quaternion calculating functions and coordinate transfrom functions
         - robot_helpers : robot controller based on RTIF
