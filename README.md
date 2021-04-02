@@ -5,19 +5,16 @@ Experiment environment: UR5e Robot + Rototiq 2f 85 Gripper + Ubuntu18.04 with RO
 
 ## Code Structure
 
-### GraspToolBox
-### RTIF :   
-    lower robot controller written by other research group, will be rewritten and deprecated soon  
-#### - utils :   
-    several helpers  
-#### - calibration_heplers :   
-    for getting camera intrinsics matrix, will be upgraded soon  
-    - gripper_helpers : Rototiq 2f 85 Gripper serial controller, force controller will be added soon
-        - image_controllers : easily getting rgb and depth picture or pointcloud from Kinect camera or realsense camera
-        - ord_helpers : quaternion calculating functions and coordinate transfrom functions
-        - robot_helpers : robot controller based on RTIF
-    - test : some test scripts
-    - config
+GraspToolBox  
+    - RTIF : lower robot controller written by other research group, will be rewritten and deprecated soon  
+    - utils : several helpers  
+        - calibration_heplers : for getting camera intrinsics matrix, will be upgraded soon  
+        - gripper_helpers : Rototiq 2f 85 Gripper serial controller, force controller will be added soon  
+        - image_controllers : easily getting rgb and depth picture or pointcloud from Kinect camera or realsense camera  
+        - ord_helpers : quaternion calculating functions and coordinate transfrom functions  
+        - robot_helpers : robot controller based on RTIF  
+    - test : some test scripts  
+    - config  
 
 ## Linting
 
@@ -63,5 +60,5 @@ pip install -r requirements.txt
 
 ## Usage
 
-Now there is no detailed usage guidance for this toolbox, it will be supplied soon.
+Now there is no detailed usage guidance for this toolbox, it will be supplied soon.  
 You can follow the code for usage now.
