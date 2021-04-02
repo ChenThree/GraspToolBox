@@ -1,9 +1,9 @@
-open3d
-numpy
-scipy
-Pillow
-serial
-opencv-python
 matplotlib
+numpy
+open3d
+opencv-python
+Pillow
 pyk4a
 pyrealsense2
+scipy
+serial
