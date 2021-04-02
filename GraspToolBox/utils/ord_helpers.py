@@ -53,7 +53,7 @@ trans_matrix_realsense, inv_matrix_realsense, trans_offset_realsense = get_trans
 trans_matrix_hand, inv_matrix_hand, trans_offset_hand = get_trans_matrix(
     ROBOT_START_POINT, ROBOT_START_ROTATION)
 # gripper center offset for realsense
-trans_offset_realsense += np.array([0, 0, 0])
+trans_offset_realsense += np.array([0, 0, 0.02])
 
 
 def q_to_euler(q):
@@ -190,7 +190,6 @@ def ord_hand_to_base(ord_in_hand):
 
 
 if __name__ == '__main__':
-    print(q_to_euler(matrix_to_q(trans_matrix_kinect)))
     # down [-180, 0, 0]
     matrix_in_camera = np.array(
         [[-2.7900429e-02, 2.3445182e-02, 9.9933565e-01],
@@ -200,13 +199,10 @@ if __name__ == '__main__':
     # matrix_in_camera = np.array([[0.02277477, -0.9989326, -0.04018656],
     #                              [0.49252543, 0.04619145, -0.86907136],
     #                              [0.87, 0., 0.4930517]])
-    q_in_camera = matrix_to_q(matrix_in_camera)
-    print('q in camera:')
-    print(q_in_camera)
-    # print(np.matmul(matrix_in_camera, matrix_in_camera.T))
-    q_in_base = rot_camera_to_q_base(matrix_in_camera)
-    print('q in base:')
-    print(q_in_base)
-    print(q_to_euler(q_in_base))
-    q_in_base = qmul(q_kinect, q_in_camera)
-    print('raw ==', q_to_euler(q_in_base))
+    euler = q_to_euler(
+        np.array([
+            0.145481866064, 0.00187258682945, -0.0200717669543, -0.989155520753
+        ]))
+    print(euler)
+    q = euler_to_q(np.array([0, 0, 180]))
+    print(q)
