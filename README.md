@@ -1,6 +1,6 @@
 # GraspToolBox
 
-GraspToolBox for VCLab of Electronic Engineering, Tsinghua University.
+GraspToolBox for VCLab of Electronic Engineering, Tsinghua University.  
 Experiment environment: UR5e Robot + Rototiq 2f 85 Gripper + Ubuntu18.04 with ROS-melodic.
 
 ## Code Structure
@@ -80,6 +80,10 @@ Install packages via Pip.
 ```bash
 pip install -r requirements.txt
 ```
+
+### Attention
+
+Before using GraspToolBox, please check the config file [config.py](./GraspToolBox/config.py). Change the Robot ip and other setting to fit the experiment environment.
 
 ## Usage
 
