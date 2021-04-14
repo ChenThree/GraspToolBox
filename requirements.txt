@@ -1,9 +1,11 @@
+graspnetAPI
 matplotlib
 numpy
 open3d
 opencv-python
 Pillow
-pyk4a
-pyrealsense2
+pyserial
 scipy
-serial
+# for camera
+# pyk4a
+# pyrealsense2

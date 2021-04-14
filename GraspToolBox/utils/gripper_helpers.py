@@ -2,13 +2,23 @@
 import serial
 import time
 
-# get gripper port
-from GraspToolBox.config import GRIPPER_PORT
-
 
 class GripperController():
+    r"""Gripper controller using serial port
 
-    def __init__(self):
+    Register mapping:
+        Register       Robot Output / Functionalities         Robot Input / Status
+         Byte 0              ACTION REQUEST                      GRIPPER STATUS
+         Byte 1              RESERVED                            RESERVED
+         Byte 2              RESERVED                            FAULT STATUS
+         Byte 3              POSITION REQUEST                    POS REQUEST ECHO
+         Byte 4              SPEED                               POSITION
+         Byte 5              FORCE                               CURRENT
+         Byte 6 to 15        RESERVED                            RESERVED
+
+    """
+
+    def __init__(self, GRIPPER_PORT):
         self.ser = serial.Serial(
             port=GRIPPER_PORT,
             baudrate=115200,
@@ -18,21 +28,13 @@ class GripperController():
             bytesize=serial.EIGHTBITS)
 
     def activate_gripper(self):
-        print('activate gripper')
         # send activate command
+        print('activate gripper')
         self.ser.write(
             b'\x09\x10\x03\xE8\x00\x03\x06\x00\x00\x00\x00\x00\x00\x73\x30')
-        # data_raw = self.ser.readline()
-        # print(data_raw)
-        # data = binascii.hexlify(data_raw)
-        # print('Response 1 ', data)
         time.sleep(1)
         # send
         self.ser.write(b'\x09\x03\x07\xD0\x00\x01\x85\xCF')
-        # data_raw = self.ser.readline()
-        # print(data_raw)
-        # data = binascii.hexlify(data_raw)
-        # print('Response 2 ', data)
         time.sleep(1)
 
     def close_gripper(self):
@@ -40,10 +42,6 @@ class GripperController():
         print('Close gripper')
         self.ser.write(
             b'\x09\x10\x03\xE8\x00\x03\x06\x09\x00\x00\xFF\xFF\xFF\x42\x29')
-        # data_raw = self.ser.readline()
-        # print(data_raw)
-        # data = binascii.hexlify(data_raw)
-        # print('Response 1 ', data)
         time.sleep(2)
 
     def open_gripper(self):
@@ -51,10 +49,6 @@ class GripperController():
         print('Open gripper')
         self.ser.write(
             b'\x09\x10\x03\xE8\x00\x03\x06\x09\x00\x00\x00\xFF\xFF\x72\x19')
-        # data_raw = self.ser.readline()
-        # print(data_raw)
-        # data = binascii.hexlify(data_raw)
-        # print('Response 1 ', data)
         time.sleep(2)
 
 

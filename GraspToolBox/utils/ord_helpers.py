@@ -1,42 +1,88 @@
 import math
 import numpy as np
-# get q and x,y,z from config
 from scipy.spatial.transform import Rotation as R
-
+# get camera pos / rot, robot home pos / rot
 from GraspToolBox.config import (ROBOT_START_POINT, ROBOT_START_ROTATION,
                                  pos_kinect, pos_realsense, q_kinect,
                                  q_realsense)
 
 
-def q_to_matrix(rot):
-    qw = rot[0]
-    qx = rot[1]
-    qy = rot[2]
-    qz = rot[3]
-    trans_matrix = list()
-    trans_matrix.append([
+def qmul(q0, q1):
+    """multiply two quaternion.
+
+    Args:
+        q0 (np.array): (1, 4)
+        q1 (np.array): (1, 4)
+
+    Returns:
+        q (np.array): (1, 4)
+    """
+    w0, x0, y0, z0 = q0
+    w1, x1, y1, z1 = q1
+    return np.array([
+        -x0 * x1 - y0 * y1 - z0 * z1 + w0 * w1,
+        x0 * w1 + y0 * z1 - z0 * y1 + w0 * x1,
+        -x0 * z1 + y0 * w1 + z0 * x1 + w0 * y1,
+        x0 * y1 - y0 * x1 + z0 * w1 + w0 * z1
+    ])
+
+
+def q_to_matrix(q):
+    """transfrom quaternion to rotation matrix.
+
+    Args:
+        q (np.array): (1, 4)
+
+    Returns:
+        rot (np.array): (3, 3)
+    """
+    qw = q[0]
+    qx = q[1]
+    qy = q[2]
+    qz = q[3]
+    rot_matrix = list()
+    rot_matrix.append([
         1 - 2 * qy * qy - 2 * qz * qz, 2 * qx * qy + 2 * qw * qz,
         2 * qx * qz - 2 * qw * qy
     ])
-    trans_matrix.append([
+    rot_matrix.append([
         2 * qx * qy - 2 * qw * qz, 1 - 2 * qx * qx - 2 * qz * qz,
         2 * qy * qz + 2 * qw * qx
     ])
-    trans_matrix.append([
+    rot_matrix.append([
         2 * qx * qz + 2 * qw * qy, 2 * qy * qz - 2 * qw * qx,
         1 - 2 * qx * qx - 2 * qy * qy
     ])
-    trans_matrix = np.array(trans_matrix)
-    return trans_matrix
+    rot_matrix = np.array(rot_matrix)
+    return rot_matrix
 
 
 def matrix_to_q(rot):
+    """transfrom rotation matrix to quaternion.
+
+    Args:
+        rot (np.array): (3, 3)
+
+    Returns:
+        q (np.array): (1, 4)
+    """
     r = R.from_matrix(rot)
     quat = r.as_quat()
     return np.array([quat[3], quat[0], quat[1], quat[2]])
 
 
 def get_trans_matrix(pos, rot):
+    """get transform matrix from given pos / rot.
+
+    Args:
+        pos (np.array): (1, 3)
+        rot (np.array): (3, 3)
+
+    Returns:
+        trans_matrix (np.array): (3, 3)
+        inv_matrix (np.array): (3, 3)
+        trans_offset (np.array): (1, 3)
+    """
     # get matrix
     trans_matrix = q_to_matrix(rot)
     inv_matrix = trans_matrix.T
@@ -52,11 +98,19 @@ trans_matrix_realsense, inv_matrix_realsense, trans_offset_realsense = get_trans
     pos_realsense, q_realsense)
 trans_matrix_hand, inv_matrix_hand, trans_offset_hand = get_trans_matrix(
     ROBOT_START_POINT, ROBOT_START_ROTATION)
-# gripper center offset for realsense
+# gripper center offset for realsense camera, need to confirm!
 trans_offset_realsense += np.array([0, 0, 0.02])
 
 
 def q_to_euler(q):
+    """transfrom quaternion to euler angle （roll, pitch, yaw）
+
+    Args:
+        q (np.array): (1, 4)
+
+    Returns:
+        euler (np.array): (1, 3)
+    """
     if len(q) != 4:
         raise ValueError('Input should be a np.array with len == 4')
     # rpy
@@ -77,49 +131,49 @@ def q_to_euler(q):
     return np.array([roll, pitch, yaw]) * 180 / np.pi
 
 
-def normalize(q):
+def euler_to_q(euler):
+    """transfromeuler angle （roll, pitch, yaw to quaternion.
+
+    Args:
+        euler (np.array): (1, 3)
+
+    Returns:
+        q (np.array): (1, 4)
+    """
+    if len(euler) != 3:
+        raise ValueError('Input should be a np.array with len == 3')
+    euler = euler / 180 * np.pi
+    qx = (math.cos(euler[0] / 2.), math.sin(euler[0] / 2.), 0., 0.)
+    qy = (math.cos(euler[1] / 2.), 0., math.sin(euler[1] / 2.), 0.)
+    qz = (math.cos(euler[2] / 2.), 0., 0., math.sin(euler[2] / 2.))
+    q = (qx, qy, qz)
+    q = qmul(qmul(q[2], q[1]), q[0])
+    # normalize
     q = np.array(q) / np.linalg.norm(q)
     return q
 
 
-def euler_to_q(rpy, order='321'):
-    if len(rpy) != 3:
-        raise ValueError('Input should be a np.array with len == 3')
-    rpy = rpy / 180 * np.pi
-    qx = (math.cos(rpy[0] / 2.), math.sin(rpy[0] / 2.), 0., 0.)
-    qy = (math.cos(rpy[1] / 2.), 0., math.sin(rpy[1] / 2.), 0.)
-    qz = (math.cos(rpy[2] / 2.), 0., 0., math.sin(rpy[2] / 2.))
-    q = (qx, qy, qz)
-    order = (ord(order[0]) - ord('1'), ord(order[1]) - ord('1'),
-             ord(order[2]) - ord('1'))
-    return normalize(qmul(qmul(q[order[0]], q[order[1]]), q[order[2]]))
-
-
-def qmul(q0, q1):
-    w0, x0, y0, z0 = q0
-    w1, x1, y1, z1 = q1
-    return np.array([
-        -x0 * x1 - y0 * y1 - z0 * z1 + w0 * w1,
-        x0 * w1 + y0 * z1 - z0 * y1 + w0 * x1,
-        -x0 * z1 + y0 * w1 + z0 * x1 + w0 * y1,
-        x0 * y1 - y0 * x1 + z0 * w1 + w0 * z1
-    ])
-
-
-def rot_camera_to_q_base(source, rot_in_camera):
+def rot_camera_to_q_base(source,
+                         rot_in_camera,
+                         gripper_euler_origin=np.array([-90, 0, -90])):
     """transform camera rot to base rot.
 
     Args:
         source (str): kinect/realsense
         rot_in_camera (np.array): 3*3 rot_matrix
+        gripper_euler_origin (np.array): default： [-90, 0, -90]
 
     Returns:
         q_in_base (np.array): quat
+
+    Attention:
+        gripper_euler_origin means the default gripper rotation defined in the grasp estimation
+        In graspnet, it's along x-axis, so orign is [-90, 0, -90]
     """
     if np.shape(rot_in_camera) != (3, 3):
         raise ValueError('Input should be a np.array with shape (3, 3)')
     # origin gripper along x axis
-    euler_origin = np.array([-90, 0, -90])
+    euler_origin = gripper_euler_origin
     q_origin = euler_to_q(euler_origin)
     # get q_in camera
     q_in_camera = matrix_to_q(rot_in_camera)
@@ -132,8 +186,8 @@ def rot_camera_to_q_base(source, rot_in_camera):
         q_in_hand = qmul(matrix_to_q(inv_matrix_realsense), q_in_camera)
         q_in_base = qmul(matrix_to_q(inv_matrix_hand), q_in_hand)
     q_in_base = qmul(q_in_base, q_origin)
-    # not rotate gripper too much
     euler_in_base = q_to_euler(q_in_base)
+    # not rotate gripper too much (origin euler[2] is 0), so let -90 =< euler[2] =< 90
     if euler_in_base[2] > 90:
         euler_in_base[2] -= 180
     elif euler_in_base[2] < -90:
