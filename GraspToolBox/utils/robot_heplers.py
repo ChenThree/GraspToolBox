@@ -17,13 +17,21 @@ class RobotController(GripperController):
     """Ur5e robot with robotiq gripper controller."""
 
     def __init__(self, defualt_v=0.1, defualt_a=1):
+        """init robot controller.
+
+        Args:
+            defualt_v (float, optional): default velocity. Defaults to 0.1.
+            defualt_a (float, optional): default acceleration. Defaults to 1.
+        """
+        print('initializing gripper')
         super().__init__(GRIPPER_PORT)
+        print('gripper initialized')
+        print('connecting to ur5e')
         self.robot_controller = HAPI(IP_ADDRESS)
+        print('connected to ur5e')
         # set default v / a
         self.defualt_v = defualt_v
         self.defualt_a = defualt_a
-        # activate fripper
-        self.activate_gripper()
 
     def get_pos(self):
         """get robot pos.
@@ -52,8 +60,8 @@ class RobotController(GripperController):
     def wait_for_movement(self):
         # wait for movement to complete
         while not self.robot_controller.isLastMovementEnd():
-            time.sleep(0.2)
-        time.sleep(0.5)
+            time.sleep(0.1)
+        time.sleep(0.1)
 
     def move_robot(self, pos=None, rotation=None, a=None, v=None, t=None):
         """move robot to given pos / rot.
@@ -85,7 +93,7 @@ class RobotController(GripperController):
         self.move_robot(
             pos=ROBOT_GRASP_END_POINT, rotation=ROBOT_GRASP_END_ROTATION)
 
-    def get_grasp(self, grasp_pos, grasp_rotation, height_offset=0.4):
+    def get_grasp(self, grasp_pos, grasp_rotation, height_offset=0.25):
         """get grasp on given pos / rot.
 
         Args:
@@ -120,3 +128,7 @@ class RobotController(GripperController):
 
 if __name__ == '__main__':
     robot_controller = RobotController()
+    robot_controller.move_home()
+    robot_controller.get_grasp(
+        grasp_pos=np.array([0, -0.3, 0.12]),
+        grasp_rotation=ROBOT_START_ROTATION)

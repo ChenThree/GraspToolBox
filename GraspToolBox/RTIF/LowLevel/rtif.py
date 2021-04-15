@@ -161,3 +161,8 @@ class RTIF(object):
                 # Attempts to extract a packet
                 data, _ = StateMessageReceiver.unpack(self.__buf)
                 return data
+
+
+if __name__ == '__main__':
+    robot = RTIF('101.6.70.91')
+    robot.connect()

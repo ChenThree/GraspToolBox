@@ -1,5 +1,5 @@
 # robot ip
-IP_ADDRESS = '101.6.70.83'
+IP_ADDRESS = '101.6.70.91'
 # robot initial status
 ROBOT_START_POINT = [-0.07566725, -0.2933787, 0.5278667]
 # camera behind
